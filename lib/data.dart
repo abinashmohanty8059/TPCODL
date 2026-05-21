@@ -6,25 +6,57 @@ class StatData {
   final String value;
   final IconData icon;
   final bool isLive;
+  final String? lottieAsset;
 
   const StatData({
     required this.label,
     required this.value,
     required this.icon,
     this.isLive = false,
+    this.lottieAsset,
   });
 }
 
 const List<StatData> liveMetrics = [
   StatData(
-    label: '33KV Feeders',
-    value: '1,204',
+    label: 'Locations',
+    value: '45 Sites',
+    icon: Icons.location_on,
+    lottieAsset: 'json/Locations.json',
+  ),
+  StatData(
+    label: 'Maintenance',
+    value: '12 Tasks',
+    icon: Icons.build,
+    lottieAsset: 'json/Maintenance.json',
+  ),
+  StatData(
+    label: 'Photos',
+    value: '182 Uploads',
+    icon: Icons.photo_library,
+    lottieAsset: 'json/Photos.json',
+  ),
+  StatData(
+    label: 'SCADA Signal',
+    value: 'Online',
+    icon: Icons.wifi,
+    isLive: true,
+    lottieAsset: 'json/SCADA Signal.json',
+  ),
+  StatData(
+    label: 'UPS battery',
+    value: '98% Cap',
+    icon: Icons.battery_charging_full,
+    isLive: true,
+    lottieAsset: 'json/UPS battery.json',
+  ),
+  StatData(
+    label: 'electricity',
+    value: '415 V',
     icon: Icons.bolt,
     isLive: true,
+    lottieAsset: 'json/electricity.json',
   ),
-  StatData(label: 'Active RMUs', value: '856', icon: Icons.memory),
-  StatData(label: 'RTU Nodes', value: '432', icon: Icons.router),
-  StatData(label: 'SCADA Uptime', value: '99.9%', icon: Icons.dataset),
 ];
 
 // ─── Core System Module Data ───
