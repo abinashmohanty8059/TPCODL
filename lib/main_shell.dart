@@ -15,13 +15,24 @@ class MainShell extends StatefulWidget {
 
 class _MainShellState extends State<MainShell> {
   int _currentIndex = 0;
+  late final List<Widget> _screens;
 
-  final _screens = const [
-    HomeScreen(),
-    SubstationScreen(),
-    SystemsScreen(),
-    ProfileScreen(),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _screens = [
+      HomeScreen(
+        onNavigateToSubstation: () {
+          setState(() {
+            _currentIndex = 1;
+          });
+        },
+      ),
+      const SubstationScreen(),
+      const SystemsScreen(),
+      const ProfileScreen(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {

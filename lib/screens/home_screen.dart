@@ -7,7 +7,9 @@ import '../widgets/stat_card.dart';
 import 'photos_view_screen.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  final VoidCallback? onNavigateToSubstation;
+
+  const HomeScreen({super.key, this.onNavigateToSubstation});
 
   @override
   Widget build(BuildContext context) {
@@ -230,8 +232,13 @@ class HomeScreen extends StatelessWidget {
             final module = coreSystemModules[index];
             return Padding(
               padding: const EdgeInsets.only(bottom: 12),
-              child:
-                  Container(
+              child: GestureDetector(
+                onTap: () {
+                  if (module.title.toLowerCase() == 'substation') {
+                    onNavigateToSubstation?.call();
+                  }
+                },
+                child: Container(
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
                             begin: Alignment.topLeft,
@@ -328,6 +335,7 @@ class HomeScreen extends StatelessWidget {
                       .animate()
                       .fadeIn(duration: 400.ms, delay: (index * 120 + 400).ms)
                       .slideX(begin: 0.1, end: 0, duration: 400.ms),
+              ),
             );
           }),
         ],

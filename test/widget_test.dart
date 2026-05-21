@@ -74,5 +74,36 @@ void main() {
     expect(find.byIcon(Icons.grid_view_rounded), findsOneWidget);
     expect(find.byIcon(Icons.view_stream_rounded), findsOneWidget);
   });
+
+  testWidgets('Tapping Substation module card navigates to SubstationScreen', (WidgetTester tester) async {
+    await tester.pumpWidget(const TPCODLApp());
+
+    // Advance virtual time to 3 seconds for the timer to trigger
+    await tester.pump(const Duration(seconds: 3));
+
+    // Pump repeatedly to allow navigation transitions to execute
+    for (int i = 0; i < 10; i++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+
+    // Ensure we are on home screen
+    expect(find.text('CORE SYSTEMS'), findsOneWidget);
+
+    // Find the text 'Substation' in CORE SYSTEMS section
+    final substationFinder = find.text('Substation');
+    await tester.ensureVisible(substationFinder);
+    for (int i = 0; i < 5; i++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+
+    // Tap the Substation card
+    await tester.tap(substationFinder);
+    for (int i = 0; i < 10; i++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+
+    // Verify that the SUBSTATION tab is active
+    expect(find.text('SUBSTATION'), findsWidgets);
+  });
 }
 

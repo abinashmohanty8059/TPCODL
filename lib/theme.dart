@@ -229,8 +229,8 @@ class GlassDecoration {
       color: Colors.black.withValues(alpha: 0.85),
       borderRadius: BorderRadius.circular(9999),
       border: Border.all(
-        color: TPColors.secondaryContainer.withValues(alpha: 0.5),
-        width: 1.2,
+        color: Colors.white.withValues(alpha: 0.7),
+        width: 2.0,
       ),
       boxShadow: [
         BoxShadow(
