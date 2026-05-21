@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:lottie/lottie.dart';
 import '../theme.dart';
 import '../data.dart';
 import '../widgets/glass_card.dart';
@@ -16,6 +17,7 @@ class ProfileScreen extends StatelessWidget {
         children: [
           _buildProfileHeader(context),
           _buildProgressSection(context),
+          _buildLottieAnimation(context),
           _buildCertificates(context),
           _buildMilestones(context),
         ],
@@ -33,7 +35,7 @@ class ProfileScreen extends StatelessWidget {
           end: Alignment.bottomCenter,
           colors: [
             TPColors.primaryContainer.withValues(alpha: 0.08),
-            TPColors.background,
+            Colors.transparent,
           ],
         ),
       ),
@@ -187,6 +189,46 @@ class ProfileScreen extends StatelessWidget {
           .fadeIn(duration: 500.ms, delay: 500.ms)
           .slideY(begin: 0.1, end: 0, duration: 500.ms),
     );
+  }
+
+  Widget _buildLottieAnimation(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+      child: GlassCard(
+        borderRadius: 20,
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 150,
+              width: double.infinity,
+              child: Lottie.asset(
+                'json/global-delivery.json',
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Center(
+                    child: Text(
+                      'Animation failed to load',
+                      style: TextStyle(color: TPColors.error),
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Global Learning Delivery Active',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: TPColors.onSurfaceVariant,
+                    fontWeight: FontWeight.w500,
+                  ),
+            ),
+          ],
+        ),
+      ),
+    ).animate()
+     .fadeIn(duration: 500.ms, delay: 600.ms)
+     .slideY(begin: 0.1, end: 0, duration: 500.ms);
   }
 
   Widget _buildCertificates(BuildContext context) {

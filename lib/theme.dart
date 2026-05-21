@@ -62,6 +62,16 @@ class TPColors {
 
   // Splash screen
   static const Color splashBackground = Color(0xFF001B3F);
+
+  // Background Gradient
+  static const Gradient lightBlueGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [
+      Color(0xFFE8F0FE),
+      Color(0xFFF4F8FF),
+    ],
+  );
 }
 
 // ─── Theme Builder ───

@@ -25,59 +25,64 @@ class _MainShellState extends State<MainShell> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: TPColors.background,
-      appBar: AppBar(
-        backgroundColor: TPColors.surface.withValues(alpha: 0.8),
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-        leading: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(9999),
-            ),
-            child: IconButton(
-              icon: const Icon(Icons.bolt, color: TPColors.primary),
-              onPressed: () {},
-              padding: EdgeInsets.zero,
-            ),
-          ),
-        ),
-        title: Text(
-          'TPCODL ACADEMY',
-          style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                color: TPColors.primary,
-                letterSpacing: 3,
-                fontSize: 15,
-              ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: IconButton(
-              icon: const Icon(Icons.search, color: TPColors.primary),
-              onPressed: () {},
-            ),
-          ),
-        ],
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: TPColors.lightBlueGradient,
       ),
-      body: Stack(
-        children: [
-          // Screen content
-          IndexedStack(
-            index: _currentIndex,
-            children: _screens,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          surfaceTintColor: Colors.transparent,
+          elevation: 0,
+          centerTitle: true,
+          leading: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(9999),
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.bolt, color: TPColors.primary),
+                onPressed: () {},
+                padding: EdgeInsets.zero,
+              ),
+            ),
           ),
-          // Floating nav bar
-          FloatingNavBar(
-            currentIndex: _currentIndex,
-            onTap: (index) {
-              setState(() => _currentIndex = index);
-            },
+          title: Text(
+            'TPCODL',
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: TPColors.primary,
+                  letterSpacing: 3,
+                  fontSize: 15,
+                ),
           ),
-        ],
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: IconButton(
+                icon: const Icon(Icons.search, color: TPColors.primary),
+                onPressed: () {},
+              ),
+            ),
+          ],
+        ),
+        body: Stack(
+          children: [
+            // Screen content
+            IndexedStack(
+              index: _currentIndex,
+              children: _screens,
+            ),
+            // Floating nav bar
+            FloatingNavBar(
+              currentIndex: _currentIndex,
+              onTap: (index) {
+                setState(() => _currentIndex = index);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

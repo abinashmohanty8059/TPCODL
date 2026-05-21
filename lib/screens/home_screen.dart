@@ -107,7 +107,7 @@ class HomeScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(9999),
                             ),
                             child: Text(
-                              '⚡ TPCODL ACADEMY',
+                              '⚡ TPCODL',
                               style: Theme.of(context).textTheme.labelMedium
                                   ?.copyWith(
                                     color: Colors.white,

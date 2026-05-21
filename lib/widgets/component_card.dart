@@ -14,7 +14,7 @@ class ComponentCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: TPColors.surfaceContainerLowest,
+          color: Colors.white.withValues(alpha: 0.7),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: TPColors.outlineVariant.withValues(alpha: 0.2),
@@ -37,7 +37,7 @@ class ComponentCard extends StatelessWidget {
                 Container(
                   height: 160,
                   width: double.infinity,
-                  color: TPColors.surfaceContainerLow,
+                  color: TPColors.surfaceContainerLow.withValues(alpha: 0.5),
                   child: Icon(
                     component.icon,
                     size: 64,
@@ -53,7 +53,7 @@ class ComponentCard extends StatelessWidget {
                         end: Alignment.bottomCenter,
                         colors: [
                           Colors.transparent,
-                          TPColors.surfaceContainerLowest.withValues(alpha: 0.8),
+                          Colors.white.withValues(alpha: 0.7),
                         ],
                       ),
                     ),

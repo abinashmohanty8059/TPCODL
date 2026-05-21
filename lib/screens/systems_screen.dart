@@ -189,7 +189,7 @@ class _SystemCardState extends State<_SystemCard> {
             margin: const EdgeInsets.only(top: 2),
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: TPColors.surfaceContainerLowest,
+              color: Colors.white.withValues(alpha: 0.7),
               borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20),

@@ -15,6 +15,6 @@ void main() {
     }
 
     // Verify we transitioned to the main shell/home screen
-    expect(find.text('TPCODL ACADEMY'), findsOneWidget);
+    expect(find.text('TPCODL'), findsOneWidget);
   });
 }

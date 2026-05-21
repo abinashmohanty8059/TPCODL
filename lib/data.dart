@@ -16,7 +16,12 @@ class StatData {
 }
 
 const List<StatData> liveMetrics = [
-  StatData(label: '33KV Feeders', value: '1,204', icon: Icons.bolt, isLive: true),
+  StatData(
+    label: '33KV Feeders',
+    value: '1,204',
+    icon: Icons.bolt,
+    isLive: true,
+  ),
   StatData(label: 'Active RMUs', value: '856', icon: Icons.memory),
   StatData(label: 'RTU Nodes', value: '432', icon: Icons.router),
   StatData(label: 'SCADA Uptime', value: '99.9%', icon: Icons.dataset),
@@ -238,7 +243,8 @@ class SystemInfo {
 const List<SystemInfo> systemsData = [
   SystemInfo(
     title: 'Data Centre',
-    description: 'Central hub for SCADA data processing, server architecture, and network operations.',
+    description:
+        'Central hub for SCADA data processing, server architecture, and network operations.',
     icon: Icons.dns,
     detailText:
         'TPCODL\'s Data Centre processes millions of data points per second from across the distribution network. It hosts the SCADA servers, historian database, and analytics engines.',
@@ -252,7 +258,8 @@ const List<SystemInfo> systemsData = [
   ),
   SystemInfo(
     title: 'PSCC (Power System Control Centre)',
-    description: 'The nerve center for real-time grid monitoring and dispatch operations.',
+    description:
+        'The nerve center for real-time grid monitoring and dispatch operations.',
     icon: Icons.monitor_heart,
     detailText:
         'The PSCC operates 24/7 with trained operators monitoring the entire TPCODL distribution network through large video walls and operator workstations.',
@@ -266,7 +273,8 @@ const List<SystemInfo> systemsData = [
   ),
   SystemInfo(
     title: 'Control Room',
-    description: 'Local substation control and monitoring for regional grid management.',
+    description:
+        'Local substation control and monitoring for regional grid management.',
     icon: Icons.dashboard_customize,
     detailText:
         'Each major substation has a local control room that serves as the first line of monitoring and response. Operators here handle routine switching and emergency operations.',
@@ -328,8 +336,8 @@ class Milestone {
 }
 
 const internProfile = InternProfile(
-  name: 'Aryan Sharma',
-  department: 'Electrical Engineering',
+  name: 'Abinash Mohanty',
+  department: 'Computer Science and engineering',
   batchId: 'TPCODL-INT-2026-B3',
   completionPercent: 0.68,
   totalModules: 12,
@@ -353,12 +361,24 @@ const internProfile = InternProfile(
   ],
   milestones: [
     Milestone(title: 'Orientation Completed', date: 'May 1', completed: true),
-    Milestone(title: 'Substation Visit – Mancheswar', date: 'May 4', completed: true),
+    Milestone(
+      title: 'Substation Visit – Mancheswar',
+      date: 'May 4',
+      completed: true,
+    ),
     Milestone(title: 'SCADA Lab Training', date: 'May 8', completed: true),
     Milestone(title: 'RMU Field Inspection', date: 'May 12', completed: true),
     Milestone(title: 'Control Room Shadowing', date: 'May 16', completed: true),
-    Milestone(title: 'Transformer Testing Lab', date: 'May 20', completed: true),
-    Milestone(title: 'Protection Relay Programming', date: 'May 24', completed: false),
+    Milestone(
+      title: 'Transformer Testing Lab',
+      date: 'May 20',
+      completed: true,
+    ),
+    Milestone(
+      title: 'Protection Relay Programming',
+      date: 'May 24',
+      completed: false,
+    ),
     Milestone(title: 'Final Assessment', date: 'May 30', completed: false),
   ],
 );
