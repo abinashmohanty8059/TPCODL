@@ -4,6 +4,7 @@ import '../theme.dart';
 import '../data.dart';
 import '../widgets/glass_card.dart';
 import '../widgets/stat_card.dart';
+import 'photos_view_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -186,10 +187,22 @@ class HomeScreen extends StatelessWidget {
             itemCount: liveMetrics.length,
             separatorBuilder: (_, _) => const SizedBox(width: 16),
             itemBuilder: (context, index) {
-              return StatCard(data: liveMetrics[index])
-                  .animate()
-                  .fadeIn(duration: 400.ms, delay: (index * 100).ms)
-                  .slideX(begin: 0.2, end: 0, duration: 400.ms);
+              final metric = liveMetrics[index];
+              return GestureDetector(
+                onTap: () {
+                  if (metric.label.toLowerCase() == 'photos') {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const PhotosViewScreen(),
+                      ),
+                    );
+                  }
+                },
+                child: StatCard(data: metric)
+                    .animate()
+                    .fadeIn(duration: 400.ms, delay: (index * 100).ms)
+                    .slideX(begin: 0.2, end: 0, duration: 400.ms),
+              );
             },
           ),
         ),
