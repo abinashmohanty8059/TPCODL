@@ -183,42 +183,33 @@ class _SubstationScreenState extends State<SubstationScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                child: Text(
-                  'Substation Monitor',
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        color: TPColors.onSurface,
-                        fontWeight: FontWeight.w800,
-                      ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              const SizedBox(width: 8),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 decoration: BoxDecoration(
-                  color: Colors.green.shade50,
-                  borderRadius: BorderRadius.circular(30),
-                  border: Border.all(color: Colors.green.shade200),
-                ),
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    PulsingLed(color: Color(0xFF00C853)),
-                    SizedBox(width: 6),
-                    Text(
-                      'GRID HEALTHY',
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 9,
-                        fontWeight: FontWeight.w800,
-                        color: Color(0xFF00C853),
-                        letterSpacing: 0.5,
-                      ),
+                  color: const Color(0xFF0F4C97), // Sleek blue box
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: const Color(0xFF25B2FE).withValues(alpha: 0.3),
+                    width: 1,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF0F4C97).withValues(alpha: 0.15),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
                     ),
                   ],
+                ),
+                child: const Text(
+                  'SUBSTATION',
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                    letterSpacing: 1.5,
+                  ),
                 ),
               ).animate().fadeIn(duration: 400.ms, delay: 100.ms),
             ],
