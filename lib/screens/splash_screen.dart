@@ -48,22 +48,6 @@ class _SplashScreenState extends State<SplashScreen>
       backgroundColor: TPColors.splashBackground,
       body: Stack(
         children: [
-          // Pulse rings
-          Center(
-            child: AnimatedBuilder(
-              animation: _pulseController,
-              builder: (context, child) {
-                return Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    _buildPulseRing(160, 0),
-                    _buildPulseRing(240, 0.33),
-                    _buildPulseRing(320, 0.66),
-                  ],
-                );
-              },
-            ),
-          ),
           // Floating particles
           ...List.generate(20, (i) => _buildParticle(i)),
           // Main content
@@ -71,65 +55,89 @@ class _SplashScreenState extends State<SplashScreen>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Glowing logo
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    // Glow effect
-                    Container(
-                      width: 120,
-                      height: 120,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: TPColors.secondaryFixed.withValues(alpha: 0.2),
-                            blurRadius: 60,
-                            spreadRadius: 20,
+                // Concentric circles (pulse rings + glowing logo)
+                SizedBox(
+                  width: 320,
+                  height: 320,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      // Concentric animated pulse rings
+                      AnimatedBuilder(
+                        animation: _pulseController,
+                        builder: (context, child) {
+                          return Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              _buildPulseRing(160, 0),
+                              _buildPulseRing(240, 0.33),
+                              _buildPulseRing(320, 0.66),
+                            ],
+                          );
+                        },
+                      ),
+                      // Glowing logo
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          // Glow effect
+                          Container(
+                            width: 120,
+                            height: 120,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: TPColors.secondaryFixed.withValues(alpha: 0.2),
+                                  blurRadius: 60,
+                                  spreadRadius: 20,
+                                ),
+                              ],
+                            ),
                           ),
+                          // Logo icon
+                          Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  TPColors.primaryContainer,
+                                  TPColors.primary,
+                                ],
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color:
+                                      TPColors.secondaryFixed.withValues(alpha: 0.5),
+                                  blurRadius: 15,
+                                ),
+                              ],
+                            ),
+                            child: const Icon(
+                              Icons.bolt,
+                              size: 52,
+                              color: Colors.white,
+                            ),
+                          )
+                              .animate(
+                                onPlay: (c) => c.repeat(reverse: true),
+                              )
+                              .scale(
+                                begin: const Offset(1, 1),
+                                end: const Offset(1.05, 1.05),
+                                duration: 2000.ms,
+                                curve: Curves.easeInOut,
+                              ),
                         ],
                       ),
-                    ),
-                    // Logo icon
-                    Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            TPColors.primaryContainer,
-                            TPColors.primary,
-                          ],
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color:
-                                TPColors.secondaryFixed.withValues(alpha: 0.5),
-                            blurRadius: 15,
-                          ),
-                        ],
-                      ),
-                      child: const Icon(
-                        Icons.bolt,
-                        size: 52,
-                        color: Colors.white,
-                      ),
-                    )
-                        .animate(
-                          onPlay: (c) => c.repeat(reverse: true),
-                        )
-                        .scale(
-                          begin: const Offset(1, 1),
-                          end: const Offset(1.05, 1.05),
-                          duration: 2000.ms,
-                          curve: Curves.easeInOut,
-                        ),
-                  ],
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 48),
+                const SizedBox(height: 80),
                 // Title
                 RichText(
                   textAlign: TextAlign.center,
@@ -164,7 +172,7 @@ class _SplashScreenState extends State<SplashScreen>
                 )
                     .animate()
                     .fadeIn(duration: 800.ms, delay: 600.ms),
-                const SizedBox(height: 64),
+                const SizedBox(height: 48),
                 // Bouncing dots
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
