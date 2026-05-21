@@ -1,0 +1,485 @@
+1. transformer.jpg
+Equipment
+
+33/11 kV Power Transformer (Toshiba)
+
+Visible Details
+Transformer Tank
+Conservator Tank
+Cooling Radiators
+Buchholz Relay Pipe
+Oil Breather
+HV/LV Bushings
+Transformer Protection Accessories
+Rating
+33/11 kV
+12.5 MVA
+TRAFO-1
+Purpose
+
+Steps down voltage from 33 kV to 11 kV for distribution.
+
+Functional Notes
+Radiators cool transformer oil.
+Conservator handles oil expansion.
+Buchholz relay detects internal faults.
+Main power conversion equipment in the substation.
+2. manualto remote lever(1).jpg
+Equipment
+
+Control Selector / Operating Lever Panel
+
+Visible Details
+Manual operation handles
+Locking selector mechanism
+Local control switches
+Purpose
+
+Allows manual/local operation of switchgear and breaker controls.
+
+Functional Notes
+Used during maintenance.
+Enables safe manual operation.
+Prevents unauthorized switching.
+3. smart meters.jpg
+Equipment
+
+Transformer Alarm Relay Modules (ALSTOM)
+
+Visible Alarms
+OTI Alarm
+WTI Alarm
+Buchholz Alarm
+MOG Alarm
+Purpose
+
+Provides transformer protection alarms and monitoring.
+
+Functional Notes
+Detects abnormal transformer conditions.
+Sends fault/alarm signals to RTU and SCADA.
+4. pss zoom(1).jpg
+Equipment
+
+RMU / Switchgear Mimic Panel
+
+Visible Details
+Gas pressure gauges
+Isolator status indicators
+Earth switch mimic
+Single line diagram
+Labels
+Q0
+Q1 ISO
+Q2 ISO
+B0
+B1
+B2
+Purpose
+
+Displays operational condition of switchgear.
+
+Functional Notes
+Helps operators monitor feeder/isolation states.
+Indicates gas pressure condition.
+5. smart meter(1).jpg
+Equipment
+
+Smart Energy Meter (HPL)
+
+Visible Details
+LCD Display
+Optical Port
+Energy measurement display
+Communication ports
+Purpose
+
+Measures electrical energy usage and sends data remotely.
+
+Functional Notes
+Supports smart grid monitoring.
+Connected to SCADA/RTU systems.
+6. relaymodule(1).jpg
+Equipment
+
+Siemens Numerical Protection Relay
+
+Visible Details
+LED indicators
+Relay trip indications
+Breaker close/open status
+Fault indication system
+Purpose
+
+Provides electrical protection logic.
+
+Functional Notes
+Detects:
+Overcurrent
+Earth fault
+Protection trips
+Sends trip commands to breakers.
+7. indside smartmeterbox.jpg
+Equipment
+
+Internal Control & Wiring Panel
+
+Visible Details
+Terminal blocks
+Wiring ducts
+MCBs
+Communication interfaces
+Grounding connections
+Purpose
+
+Handles internal electrical and communication wiring.
+
+Functional Notes
+Central wiring hub.
+Connects relays, RTUs, sensors, and meters.
+8. switch inside rtu.jpg
+Equipment
+
+Industrial Ethernet Switch
+
+Visible Details
+RJ45 Ethernet ports
+LAN communication cables
+Link/activity LEDs
+Purpose
+
+Provides network communication for SCADA devices.
+
+Functional Notes
+Supports industrial Ethernet communication.
+Connects RTU, relays, and meters.
+9. rturemotetomanualswitch.jpg
+Equipment
+
+Local/Remote RTU Selector Switch
+
+Visible Details
+LOCAL indicator
+REMOTE indicator
+Key switch
+Purpose
+
+Selects between local operation and remote SCADA control.
+
+Functional Notes
+LOCAL:
+Manual field control
+REMOTE:
+SCADA operation enabled
+10. rtucpu.jpg
+Equipment
+
+HUSKY RTU 6049-E70 CPU Module
+
+Visible Details
+CPU communication ports
+Ethernet interfaces
+LED indicators:
+Power
+Fault
+Run
+Ready
+Purpose
+
+Processes remote terminal unit operations.
+
+Functional Notes
+Core processing unit of RTU.
+Handles telemetry and remote commands.
+11. rtucpu2.jpg
+Equipment
+
+RTU Communication CPU Interface
+
+Visible Details
+Ethernet links
+Fiber communication ports
+CPU communication interfaces
+Purpose
+
+Handles communication networking.
+
+Functional Notes
+Ensures data transfer between devices and SCADA.
+12. rtucpu3.jpg
+Equipment
+
+RTU Redundant CPU/PSU Modules
+
+Visible Details
+PSU cards
+CPU cards
+Diagnostic LEDs
+Communication interfaces
+Purpose
+
+Provides redundancy and reliable operation.
+
+Functional Notes
+Prevents communication failure.
+Supports backup power functionality.
+13. rtucpu4.jpg
+Equipment
+
+Complete RTU Rack System
+
+Visible Details
+Modular RTU slots
+IEC 61850 compliant hardware
+CPU and communication modules
+Purpose
+
+Acts as central automation hardware.
+
+Functional Notes
+Supports substation automation architecture.
+14. rtucpu connection.jpg
+Equipment
+
+MOXA Managed Industrial Ethernet Switches
+
+Visible Details
+Ethernet ports
+Industrial networking cables
+Status LEDs
+Purpose
+
+Provides industrial communication backbone.
+
+Functional Notes
+Connects RTU, relays, meters, and SCADA network.
+15. acbd pannel.jpg
+Equipment
+
+AC Distribution Board (ACDB)
+
+Visible Details
+MCCB handles
+Voltage display
+ON/OFF/TRIP indicators
+415V ACDB panel markings
+Purpose
+
+Distributes auxiliary AC power.
+
+Functional Notes
+Supplies:
+RTU systems
+Battery charger
+Lighting
+Auxiliary equipment
+16. rtubox.jpg
+Equipment
+
+RTU Cabinet
+
+Visible Details
+Full RTU rack enclosure
+Communication devices
+Internal network hardware
+Purpose
+
+Houses automation and communication systems.
+
+Functional Notes
+Main automation control cabinet.
+17. relay panel front.jpg
+Equipment
+
+Front Relay Protection Panel
+
+Visible Details
+Protection relay display
+Status LEDs
+Breaker control buttons
+Purpose
+
+Protection and monitoring interface.
+
+Functional Notes
+Displays real-time relay conditions.
+18. relay panel internal.jpg
+Equipment
+
+Internal Relay Control Cabinet
+
+Visible Details
+Relay wiring
+MCB rows
+Terminal strips
+Communication modules
+Purpose
+
+Handles relay wiring and logic distribution.
+
+Functional Notes
+Organized industrial control architecture.
+19. network rack.jpg
+Equipment
+
+Industrial Network Rack
+
+Visible Details
+Ethernet switches
+Communication patching
+Fiber/Ethernet routing
+Purpose
+
+Central communication infrastructure.
+
+Functional Notes
+Handles SCADA communication traffic.
+20. rtu rack complete.jpg
+Equipment
+
+Complete RTU Automation Rack
+
+Visible Details
+RTU modules
+Ethernet devices
+Rack-mounted systems
+Purpose
+
+Substation automation and telemetry.
+
+Functional Notes
+Integrates all field communication.
+21. gas pressure gauges.jpg
+Equipment
+
+Gas Pressure Monitoring Gauges
+
+Visible Details
+Pressure meters
+Gauge indicators
+Purpose
+
+Monitors SF6/gas pressure levels.
+
+Functional Notes
+Ensures safe switchgear operation.
+22. breaker mimic panel.jpg
+Equipment
+
+Breaker Mimic Diagram Panel
+
+Visible Details
+Single-line electrical diagram
+Breaker positions
+Purpose
+
+Displays electrical topology and breaker status.
+
+Functional Notes
+Used by operators for switching operations.
+23. ethernet communication panel.jpg
+Equipment
+
+Communication Ethernet Panel
+
+Visible Details
+LAN patching
+Industrial switches
+Communication indicators
+Purpose
+
+Handles substation communication routing.
+
+Functional Notes
+Backbone of SCADA connectivity.
+24. transformer alarm module.jpg
+Equipment
+
+Transformer Alarm Interface Module
+
+Visible Details
+Alarm relay blocks
+Transformer fault indicators
+Purpose
+
+Alarm annunciation and protection signaling.
+
+Functional Notes
+Sends alarms to SCADA.
+25. remote control switch.jpg
+Equipment
+
+Remote/Manual Control Selector
+
+Purpose
+
+Enables remote SCADA control or local operation.
+
+Functional Notes
+Important for operational safety.
+26. moxa switch.jpg
+Equipment
+
+MOXA Industrial Managed Switch
+
+Purpose
+
+Industrial-grade networking for substations.
+
+Functional Notes
+Rugged communication device.
+27. husky rtu front.jpg
+Equipment
+
+HUSKY RTU Front Interface
+
+Purpose
+
+RTU monitoring and communication processing.
+
+Functional Notes
+Centralized data acquisition system.
+28. rtu ethernet ports.jpg
+Equipment
+
+RTU Ethernet Interface Section
+
+Purpose
+
+Handles Ethernet-based SCADA communication.
+
+Functional Notes
+Enables IEC-61850 communication.
+29. battery charger feeder.jpg
+Equipment
+
+Battery Charger Feeder Section
+
+Purpose
+
+Supplies DC systems and RTU backup power.
+
+Functional Notes
+Critical for uninterrupted operation.
+30. substation overview.jpg
+Equipment
+
+Overall Substation Automation System
+
+Includes
+Transformer
+RTU
+Relays
+Communication system
+ACDB
+Smart metering
+Purpose
+
+Integrated monitoring and control of electrical distribution system.
+
+Functional Notes
+Supports:
+Remote monitoring
+Fault handling
+SCADA operation
+Automation

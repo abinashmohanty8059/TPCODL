@@ -19,6 +19,13 @@ class StatData {
 
 const List<StatData> liveMetrics = [
   StatData(
+    label: 'electricity',
+    value: '415 V',
+    icon: Icons.bolt,
+    isLive: true,
+    lottieAsset: 'json/electricity.json',
+  ),
+  StatData(
     label: 'Locations',
     value: '45 Sites',
     icon: Icons.location_on,
@@ -49,13 +56,6 @@ const List<StatData> liveMetrics = [
     icon: Icons.battery_charging_full,
     isLive: true,
     lottieAsset: 'json/UPS battery.json',
-  ),
-  StatData(
-    label: 'electricity',
-    value: '415 V',
-    icon: Icons.bolt,
-    isLive: true,
-    lottieAsset: 'json/electricity.json',
   ),
 ];
 
