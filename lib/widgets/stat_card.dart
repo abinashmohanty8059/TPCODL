@@ -14,83 +14,79 @@ class StatCard extends StatelessWidget {
     return GlassCard(
       borderRadius: 16,
       borderColor: TPColors.secondaryFixed.withValues(alpha: 0.35),
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       child: SizedBox(
-        width: 150,
-        height: 125,
+        width: 140,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            if (data.lottieAsset != null)
+              Expanded(
+                child: Lottie.asset(
+                  data.lottieAsset!,
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Center(
+                      child: Icon(data.icon, size: 36, color: TPColors.primary),
+                    );
+                  },
+                ),
+              )
+            else
+              Expanded(
+                child: Center(
+                  child: Icon(data.icon, size: 36, color: TPColors.primary),
+                ),
+              ),
+            const SizedBox(height: 6),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (data.lottieAsset != null)
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: TPColors.surfaceContainer.withValues(alpha: 0.4),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    child: Lottie.asset(
-                      data.lottieAsset!,
-                      fit: BoxFit.contain,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Center(
-                          child: Icon(data.icon, size: 20, color: TPColors.primary),
-                        );
-                      },
-                    ),
-                  )
-                else
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: TPColors.surfaceContainer,
-                      borderRadius: BorderRadius.circular(9999),
-                    ),
-                    child: Icon(data.icon, size: 20, color: TPColors.primary),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        data.label,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: TPColors.onSurfaceVariant,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 10,
+                            ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        data.value,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: TPColors.onSurface,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 11,
+                            ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
+                ),
                 if (data.isLive)
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
                     decoration: BoxDecoration(
                       color: TPColors.secondaryContainer.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(6),
+                      borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
                       'LIVE',
                       style: Theme.of(context).textTheme.labelMedium?.copyWith(
                             color: TPColors.secondaryContainer,
                             fontWeight: FontWeight.w800,
-                            letterSpacing: 0.5,
-                            fontSize: 9,
+                            fontSize: 8,
                           ),
                     ),
                   ),
               ],
-            ),
-            const Spacer(),
-            Text(
-              data.value,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: TPColors.onSurface,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18,
-                  ),
-            ),
-            const SizedBox(height: 1),
-            Text(
-              data.label,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: TPColors.onSurfaceVariant,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 11,
-                  ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),
