@@ -224,8 +224,8 @@ class HomeScreen extends StatelessWidget {
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                             colors: [
-                              Color.fromARGB(255, 155, 218, 255),
-                              Color.fromARGB(255, 253, 199, 246),
+                              Color.fromARGB(255, 7, 30, 101),
+                              Color.fromARGB(255, 31, 155, 233),
                             ],
                           ),
                           borderRadius: BorderRadius.circular(16),
