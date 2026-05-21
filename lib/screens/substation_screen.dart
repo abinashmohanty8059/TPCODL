@@ -166,7 +166,7 @@ class _SubstationScreenState extends State<SubstationScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildSCADADashboardHeader(),
+                    _buildHeader(context),
                     _buildSearchSection(),
                     _buildContentSection(),
                   ],
@@ -176,23 +176,26 @@ class _SubstationScreenState extends State<SubstationScreen> {
     );
   }
 
-  Widget _buildSCADADashboardHeader() {
+  Widget _buildHeader(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+      padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Substation Monitor',
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      color: TPColors.onSurface,
-                      fontWeight: FontWeight.w800,
-                    ),
-              ).animate().fadeIn(duration: 400.ms).slideX(begin: -0.05, end: 0),
-              
+              Expanded(
+                child: Text(
+                  'Substation Monitor',
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        color: TPColors.onSurface,
+                        fontWeight: FontWeight.w800,
+                      ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(width: 8),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
@@ -220,8 +223,19 @@ class _SubstationScreenState extends State<SubstationScreen> {
               ).animate().fadeIn(duration: 400.ms, delay: 100.ms),
             ],
           ),
+          const SizedBox(height: 8),
+          // Animated pulse line
+          const _PulseLine().animate().fadeIn(duration: 600.ms, delay: 200.ms),
           const SizedBox(height: 12),
-
+          Text(
+            'Explore the critical hardware that powers the modern grid. High-fidelity utility components engineered for precision and reliability.',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: TPColors.onSurfaceVariant,
+                ),
+          ).animate().fadeIn(duration: 500.ms, delay: 300.ms),
+          const SizedBox(height: 16),
+          
+          // SCADA operations telemetry dashboard
           GlassCard(
             borderRadius: 16,
             padding: const EdgeInsets.all(16),
@@ -233,34 +247,56 @@ class _SubstationScreenState extends State<SubstationScreen> {
                   children: [
                     Icon(Icons.dashboard_customize, size: 18, color: TPColors.primary),
                     SizedBox(width: 8),
-                    Text(
-                      'SYSTEM OPERATIONS TELEMETRY',
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 10,
-                        fontWeight: FontWeight.w900,
-                        color: TPColors.primary,
-                        letterSpacing: 1.0,
+                    Expanded(
+                      child: Text(
+                        'SYSTEM OPERATIONS TELEMETRY',
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 10,
+                          fontWeight: FontWeight.w900,
+                          color: TPColors.primary,
+                          letterSpacing: 1.0,
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 14),
-                
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildSCADAMetric('33 / 11 kV', 'SYSTEM RATING', Icons.bolt),
-                    _buildSCADAMetric('49.98 Hz', 'FREQUENCY', Icons.waves),
-                    _buildSCADAMetric('1.00', 'POWER FACTOR', Icons.speed),
-                    _buildSCADAMetric('30 Nodes', 'ACTIVE I/O', Icons.settings_input_component),
-                  ],
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final width = constraints.maxWidth;
+                    final double itemWidth = width > 400 ? (width - 36) / 4 : (width - 12) / 2;
+                    return Wrap(
+                      spacing: 12,
+                      runSpacing: 12,
+                      children: [
+                        SizedBox(
+                          width: itemWidth,
+                          child: _buildSCADAMetric('33 / 11 kV', 'SYSTEM RATING', Icons.bolt),
+                        ),
+                        SizedBox(
+                          width: itemWidth,
+                          child: _buildSCADAMetric('49.98 Hz', 'FREQUENCY', Icons.waves),
+                        ),
+                        SizedBox(
+                          width: itemWidth,
+                          child: _buildSCADAMetric('1.00', 'POWER FACTOR', Icons.speed),
+                        ),
+                        SizedBox(
+                          width: itemWidth,
+                          child: _buildSCADAMetric('30 Nodes', 'ACTIVE I/O', Icons.settings_input_component),
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ],
             ),
-          ).animate().fadeIn(duration: 500.ms, delay: 200.ms).slideY(begin: 0.05, end: 0),
+          ).animate().fadeIn(duration: 500.ms, delay: 400.ms).slideY(begin: 0.05, end: 0),
           const SizedBox(height: 16),
 
+          // Quick stat cards
           Row(
             children: [
               Expanded(
@@ -281,7 +317,7 @@ class _SubstationScreenState extends State<SubstationScreen> {
                 ),
               ),
             ],
-          ).animate().fadeIn(duration: 500.ms, delay: 300.ms),
+          ).animate().fadeIn(duration: 500.ms, delay: 500.ms),
         ],
       ),
     );
@@ -296,13 +332,16 @@ class _SubstationScreenState extends State<SubstationScreen> {
           children: [
             Icon(icon, size: 14, color: TPColors.onSurfaceVariant.withValues(alpha: 0.7)),
             const SizedBox(width: 4),
-            Text(
-              value,
-              style: const TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 13,
-                fontWeight: FontWeight.w800,
-                color: TPColors.onSurface,
+            Flexible(
+              child: Text(
+                value,
+                style: const TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 13,
+                  fontWeight: FontWeight.w800,
+                  color: TPColors.onSurface,
+                ),
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ],
@@ -317,6 +356,7 @@ class _SubstationScreenState extends State<SubstationScreen> {
             color: TPColors.onSurfaceVariant,
             letterSpacing: 0.5,
           ),
+          overflow: TextOverflow.ellipsis,
         ),
       ],
     );
@@ -349,6 +389,7 @@ class _SubstationScreenState extends State<SubstationScreen> {
                     fontWeight: FontWeight.w700,
                     color: TPColors.onSurfaceVariant,
                   ),
+                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 2),
                 Text(
@@ -359,6 +400,7 @@ class _SubstationScreenState extends State<SubstationScreen> {
                     fontWeight: FontWeight.w800,
                     color: color,
                   ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
@@ -511,6 +553,44 @@ class CategoryCard extends StatelessWidget {
     required this.onTap,
   });
 
+  IconData _getCategoryIcon(String categoryName) {
+    switch (categoryName) {
+      case 'Transformer Systems':
+        return Icons.electric_meter;
+      case 'RTU Systems':
+        return Icons.router;
+      case 'Protection Relays':
+        return Icons.settings_system_daydream;
+      case 'Smart Metering':
+        return Icons.bolt;
+      case 'Communication Network':
+        return Icons.settings_ethernet;
+      case 'ACDB Panels':
+        return Icons.power;
+      case 'Control Systems':
+        return Icons.toggle_on;
+      case 'Switchgear':
+        return Icons.switch_access_shortcut;
+      case 'SCADA Infrastructure':
+        return Icons.dns;
+      default:
+        return Icons.electrical_services;
+    }
+  }
+
+  Color _getPriorityColor(String priority) {
+    switch (priority) {
+      case 'CRITICAL':
+        return Colors.red.shade600;
+      case 'HIGH':
+        return Colors.amber.shade700;
+      case 'CORE':
+        return Colors.green.shade600;
+      default:
+        return TPColors.primary;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -518,16 +598,16 @@ class CategoryCard extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.8),
-          borderRadius: BorderRadius.circular(16),
+          color: Colors.white.withValues(alpha: 0.7),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: TPColors.primaryContainer.withValues(alpha: 0.15),
+            color: TPColors.outlineVariant.withValues(alpha: 0.2),
           ),
           boxShadow: [
             BoxShadow(
-              color: TPColors.primaryContainer.withValues(alpha: 0.05),
+              color: TPColors.primaryContainer.withValues(alpha: 0.04),
               blurRadius: 20,
-              offset: const Offset(0, 6),
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -541,13 +621,17 @@ class CategoryCard extends StatelessWidget {
                 Container(
                   height: 160,
                   width: double.infinity,
-                  color: TPColors.surfaceContainerLow,
+                  color: TPColors.surfaceContainerLow.withValues(alpha: 0.5),
                   child: Image.asset(
                     'subststion_data/pic/${category.coverImage.split('/').last}',
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
-                      return const Center(
-                        child: Icon(Icons.electrical_services, size: 48, color: Colors.grey),
+                      return Center(
+                        child: Icon(
+                          _getCategoryIcon(category.name),
+                          size: 64,
+                          color: TPColors.primaryContainer.withValues(alpha: 0.3),
+                        ),
                       );
                     },
                   ),
@@ -560,53 +644,32 @@ class CategoryCard extends StatelessWidget {
                         end: Alignment.bottomCenter,
                         colors: [
                           Colors.transparent,
-                          Colors.black.withValues(alpha: 0.6),
+                          Colors.white.withValues(alpha: 0.7),
                         ],
                       ),
                     ),
                   ),
                 ),
-                // Priority Badge top right
+                // Circular icon badge top right
                 Positioned(
                   top: 12,
                   right: 12,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.7),
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(color: Colors.white24),
+                      color: TPColors.surface.withValues(alpha: 0.9),
+                      borderRadius: BorderRadius.circular(9999),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.05),
+                          blurRadius: 4,
+                        ),
+                      ],
                     ),
-                    child: Text(
-                      category.priority,
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 9,
-                        fontWeight: FontWeight.w800,
-                        color: category.priority == 'CRITICAL' ? Colors.red.shade400 : Colors.amber.shade400,
-                      ),
-                    ),
-                  ),
-                ),
-                // Items Count badge bottom left
-                Positioned(
-                  bottom: 12,
-                  left: 12,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.cyan.shade900,
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(color: Colors.cyan.shade300.withValues(alpha: 0.3)),
-                    ),
-                    child: Text(
-                      '$itemCount DEVICES',
-                      style: const TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 9,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.white,
-                      ),
+                    child: Icon(
+                      _getCategoryIcon(category.name),
+                      size: 20,
+                      color: TPColors.secondary,
                     ),
                   ),
                 ),
@@ -620,20 +683,41 @@ class CategoryCard extends StatelessWidget {
                 children: [
                   Text(
                     category.name,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: TPColors.onSurface,
-                    ),
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          fontSize: 18,
+                          color: TPColors.onSurface,
+                        ),
                   ),
                   const SizedBox(height: 6),
                   Text(
                     category.description,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: TPColors.onSurfaceVariant,
-                      height: 1.4,
-                    ),
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: TPColors.onSurfaceVariant,
+                          height: 1.4,
+                        ),
+                  ),
+                  const SizedBox(height: 12),
+                  // Tags at the bottom (using Wrap to prevent overflows)
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      _buildTag(
+                        context,
+                        category.voltageClass.toUpperCase(),
+                        TPColors.secondaryContainer,
+                      ),
+                      _buildTag(
+                        context,
+                        category.priority.toUpperCase(),
+                        _getPriorityColor(category.priority),
+                      ),
+                      _buildTag(
+                        context,
+                        '$itemCount DEVICES',
+                        TPColors.primary,
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -641,6 +725,78 @@ class CategoryCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildTag(BuildContext context, String text, Color color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: GlassDecoration.glassTag(color: color),
+      child: Text(
+        text,
+        style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: color,
+              fontSize: 10,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.5,
+            ),
+      ),
+    );
+  }
+}
+
+// Animated pulse line widget matching the Stitch design
+class _PulseLine extends StatefulWidget {
+  const _PulseLine();
+
+  @override
+  State<_PulseLine> createState() => _PulseLineState();
+}
+
+class _PulseLineState extends State<_PulseLine>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return Container(
+          height: 2,
+          width: 200,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(1),
+            gradient: LinearGradient(
+              colors: [
+                Colors.transparent,
+                TPColors.secondaryContainer,
+                Colors.transparent,
+              ],
+              stops: [
+                (_controller.value - 0.3).clamp(0.0, 1.0),
+                _controller.value,
+                (_controller.value + 0.3).clamp(0.0, 1.0),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
