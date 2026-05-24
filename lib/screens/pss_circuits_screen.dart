@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../models/pss_circuit.dart';
 import '../services/pss_circuit_service.dart';
 import '../theme.dart';
@@ -22,15 +23,29 @@ class _PssCircuitsScreenState extends State<PssCircuitsScreen> {
     _future = PssCircuitService.fetchActiveCircuits();
   }
 
-  /// Routes to either the image viewer dialog or in-app WebView
-  void _openContent(BuildContext context, PssCircuit circuit) {
+  /// Routes based on content_type and open_in_app flag:
+  /// - open_in_app == true  → in-app WebView (web) or image dialog (image)
+  /// - open_in_app == false → external browser via url_launcher
+  void _openContent(BuildContext context, PssCircuit circuit) async {
+    if (!circuit.openInApp) {
+      // External browser
+      final uri = Uri.parse(circuit.contentUrl);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      }
+      return;
+    }
+
+    // In-app routing
     if (circuit.isWebContent) {
+      if (!context.mounted) return;
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (_) => PssWebViewScreen(circuit: circuit),
         ),
       );
     } else {
+      if (!context.mounted) return;
       showDialog(
         context: context,
         barrierColor: Colors.black87,
@@ -251,57 +266,47 @@ class _PssCircuitCard extends StatelessWidget {
           ),
         ],
       ),
-      child: IntrinsicHeight(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // ── Circuit number badge (left dark strip) ──────────────────
-            Container(
-              width: 48,
-              decoration: BoxDecoration(
-                color: TPColors.primary,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  bottomLeft: Radius.circular(12),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 100),
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // ── Circuit number badge (left dark strip) ──────────────────
+              Container(
+                width: 48,
+                decoration: BoxDecoration(
+                  color: TPColors.primary,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(12),
+                    bottomLeft: Radius.circular(12),
+                  ),
                 ),
-              ),
-              child: Center(
-                child: Text(
-                  circuit.circuitNumber > 0 ? '${circuit.circuitNumber}' : '—',
-                  style: const TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 18,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.white,
+                child: Center(
+                  child: Text(
+                    circuit.circuitNumber > 0 ? '${circuit.circuitNumber}' : '—',
+                    style: const TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
-            ),
 
-            // ── Yellow label area ────────────────────────────────────────
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
-                color: const Color(0xFFFFF176),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // First bold line (heading, e.g. "UNIT 8 PSS:")
-                    Text(
-                      circuit.title.toUpperCase(),
-                      style: const TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 15,
-                        fontWeight: FontWeight.w900,
-                        color: Color(0xFF1A1A1A),
-                        height: 1.3,
-                      ),
-                    ),
-                    // Second bold line (e.g. "11KV PT 3")
-                    if (circuit.subtitle.isNotEmpty)
+              // ── Yellow label area ────────────────────────────────────────
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+                  color: const Color(0xFFFFF176),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // First bold line (heading)
                       Text(
-                        circuit.subtitle.toUpperCase(),
+                        circuit.title.toUpperCase(),
                         style: const TextStyle(
                           fontFamily: 'Inter',
                           fontSize: 15,
@@ -310,62 +315,76 @@ class _PssCircuitCard extends StatelessWidget {
                           height: 1.3,
                         ),
                       ),
-                    // Smaller bus section text
-                    if (circuit.busSection.isNotEmpty) ...[
-                      const SizedBox(height: 8),
-                      Text(
-                        circuit.busSection.toUpperCase(),
-                        style: const TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFF444444),
+                      // Second bold line
+                      if (circuit.subtitle.isNotEmpty)
+                        Text(
+                          circuit.subtitle.toUpperCase(),
+                          style: const TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 15,
+                            fontWeight: FontWeight.w900,
+                            color: Color(0xFF1A1A1A),
+                            height: 1.3,
+                          ),
+                        ),
+                      // Smaller bus section
+                      if (circuit.busSection.isNotEmpty) ...[
+                        const SizedBox(height: 8),
+                        Text(
+                          circuit.busSection.toUpperCase(),
+                          style: const TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF444444),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+
+              // ── QR tap zone (right) ──────────────────────────────────────
+              GestureDetector(
+                onTap: onQrTap,
+                child: Container(
+                  width: 80,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFFFF176),
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(12),
+                      bottomRight: Radius.circular(12),
+                    ),
+                  ),
+                  child: Center(
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: const Color(0xFF1A6EB5),
+                          width: 1.5,
                         ),
                       ),
-                    ],
-                  ],
-                ),
-              ),
-            ),
-
-            // ── QR tap zone (right) ─────────────────────────────────────
-            GestureDetector(
-              onTap: onQrTap,
-              child: Container(
-                width: 80,
-                decoration: const BoxDecoration(
-                  color: Color(0xFFFFF176),
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(12),
-                    bottomRight: Radius.circular(12),
-                  ),
-                ),
-                child: Center(
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: const Color(0xFF1A6EB5),
-                        width: 1.5,
+                      child: const Icon(
+                        Icons.qr_code_2_rounded,
+                        size: 40,
+                        color: Color(0xFF1A6EB5),
                       ),
                     ),
-                    child: const Icon(
-                      Icons.qr_code_2_rounded,
-                      size: 40,
-                      color: Color(0xFF1A6EB5),
-                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 }
+
 
 // ─── Image-only fullscreen viewer ─────────────────────────────────────────
 

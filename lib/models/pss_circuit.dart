@@ -1,12 +1,14 @@
 /// Represents one entry in the `pss_circuits` Supabase table.
 ///
-/// The yellow label layout maps to these fields:
+/// Yellow label layout:
 ///   [title]      → first bold line  (e.g. "UNIT 8 PSS:")
 ///   [subtitle]   → second bold line (e.g. "11KV PT 3")
 ///   [busSection] → smaller sub-text (e.g. "11KV BUS SECTION 3")
 ///
-/// [contentType] is either `'image'` (fullscreen zoomable image viewer)
-/// or `'web'` (opens [contentUrl] in an in-app WebView).
+/// Content routing:
+///   [contentType] — `'image'` or `'web'`
+///   [openInApp]   — `true` → in-app WebView / image viewer
+///                   `false` → external browser via url_launcher
 class PssCircuit {
   final String id;
   final int circuitNumber;
@@ -15,6 +17,7 @@ class PssCircuit {
   final String busSection;
   final String contentUrl;
   final String contentType; // 'image' | 'web'
+  final bool openInApp;     // true = in-app; false = external browser
   final bool isActive;
   final int displayOrder;
   final DateTime createdAt;
@@ -27,6 +30,7 @@ class PssCircuit {
     required this.busSection,
     required this.contentUrl,
     required this.contentType,
+    required this.openInApp,
     required this.isActive,
     required this.displayOrder,
     required this.createdAt,
@@ -43,6 +47,7 @@ class PssCircuit {
       busSection: json['bus_section'] as String? ?? '',
       contentUrl: json['content_url'] as String,
       contentType: json['content_type'] as String? ?? 'image',
+      openInApp: json['open_in_app'] as bool? ?? true,
       isActive: json['is_active'] as bool? ?? true,
       displayOrder: (json['display_order'] as num?)?.toInt() ?? 0,
       createdAt: DateTime.parse(json['created_at'] as String),
@@ -57,6 +62,7 @@ class PssCircuit {
         'bus_section': busSection,
         'content_url': contentUrl,
         'content_type': contentType,
+        'open_in_app': openInApp,
         'is_active': isActive,
         'display_order': displayOrder,
         'created_at': createdAt.toIso8601String(),
