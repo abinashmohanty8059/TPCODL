@@ -1,11 +1,17 @@
 /// Represents one entry in the `pss_circuits` Supabase table.
 ///
-/// [contentType] is either `'image'` (opens a fullscreen zoomable image)
-/// or `'web'` (opens the URL in an in-app WebView).
+/// The yellow label layout maps to these fields:
+///   [title]      → first bold line  (e.g. "UNIT 8 PSS:")
+///   [subtitle]   → second bold line (e.g. "11KV PT 3")
+///   [busSection] → smaller sub-text (e.g. "11KV BUS SECTION 3")
+///
+/// [contentType] is either `'image'` (fullscreen zoomable image viewer)
+/// or `'web'` (opens [contentUrl] in an in-app WebView).
 class PssCircuit {
   final String id;
   final int circuitNumber;
   final String title;
+  final String subtitle;
   final String busSection;
   final String contentUrl;
   final String contentType; // 'image' | 'web'
@@ -17,6 +23,7 @@ class PssCircuit {
     required this.id,
     required this.circuitNumber,
     required this.title,
+    required this.subtitle,
     required this.busSection,
     required this.contentUrl,
     required this.contentType,
@@ -32,6 +39,7 @@ class PssCircuit {
       id: json['id'] as String,
       circuitNumber: (json['circuit_number'] as num?)?.toInt() ?? 0,
       title: json['title'] as String? ?? '',
+      subtitle: json['subtitle'] as String? ?? '',
       busSection: json['bus_section'] as String? ?? '',
       contentUrl: json['content_url'] as String,
       contentType: json['content_type'] as String? ?? 'image',
@@ -45,6 +53,7 @@ class PssCircuit {
         'id': id,
         'circuit_number': circuitNumber,
         'title': title,
+        'subtitle': subtitle,
         'bus_section': busSection,
         'content_url': contentUrl,
         'content_type': contentType,

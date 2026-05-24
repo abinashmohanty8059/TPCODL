@@ -287,6 +287,7 @@ class _PssCircuitCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    // First bold line (heading, e.g. "UNIT 8 PSS:")
                     Text(
                       circuit.title.toUpperCase(),
                       style: const TextStyle(
@@ -297,6 +298,19 @@ class _PssCircuitCard extends StatelessWidget {
                         height: 1.3,
                       ),
                     ),
+                    // Second bold line (e.g. "11KV PT 3")
+                    if (circuit.subtitle.isNotEmpty)
+                      Text(
+                        circuit.subtitle.toUpperCase(),
+                        style: const TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 15,
+                          fontWeight: FontWeight.w900,
+                          color: Color(0xFF1A1A1A),
+                          height: 1.3,
+                        ),
+                      ),
+                    // Smaller bus section text
                     if (circuit.busSection.isNotEmpty) ...[
                       const SizedBox(height: 8),
                       Text(
@@ -314,7 +328,7 @@ class _PssCircuitCard extends StatelessWidget {
               ),
             ),
 
-            // ── QR / link tap zone (right) ───────────────────────────────
+            // ── QR tap zone (right) ─────────────────────────────────────
             GestureDetector(
               onTap: onQrTap,
               child: Container(
@@ -326,49 +340,23 @@ class _PssCircuitCard extends StatelessWidget {
                     bottomRight: Radius.circular(12),
                   ),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: const Color(0xFF1A6EB5),
-                          width: 1.5,
-                        ),
-                      ),
-                      child: Icon(
-                        circuit.isWebContent
-                            ? Icons.open_in_browser_rounded
-                            : Icons.qr_code_2_rounded,
-                        size: 34,
+                child: Center(
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
                         color: const Color(0xFF1A6EB5),
+                        width: 1.5,
                       ),
                     ),
-                    const SizedBox(height: 5),
-                    const Text(
-                      'SCAN',
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 8,
-                        fontWeight: FontWeight.w900,
-                        color: Color(0xFF1A1A1A),
-                        letterSpacing: 0.5,
-                      ),
+                    child: const Icon(
+                      Icons.qr_code_2_rounded,
+                      size: 40,
+                      color: Color(0xFF1A6EB5),
                     ),
-                    const Text(
-                      'ME!',
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 8,
-                        fontWeight: FontWeight.w900,
-                        color: Color(0xFF1A1A1A),
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -492,6 +480,15 @@ class _CircuitDiagramDialogState extends State<_CircuitDiagramDialog> {
                             color: Colors.white,
                           ),
                         ),
+                        if (widget.circuit.subtitle.isNotEmpty)
+                          Text(
+                            widget.circuit.subtitle.toUpperCase(),
+                            style: const TextStyle(
+                                fontFamily: 'Inter',
+                                fontSize: 13,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.white),
+                          ),
                         if (widget.circuit.busSection.isNotEmpty)
                           Text(
                             widget.circuit.busSection,
