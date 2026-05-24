@@ -7,6 +7,7 @@ import '../widgets/component_card.dart';
 import '../widgets/glass_card.dart';
 import 'component_detail_screen.dart';
 import 'category_detail_screen.dart';
+import 'pss_circuits_screen.dart';
 
 class SubstationCategory {
   final String name;
@@ -496,8 +497,11 @@ class _SubstationScreenState extends State<SubstationScreen> {
         },
       );
     } else {
-      // Show list of Categories
-      return ListView.builder(
+      // Show list of Categories (with PSS Circuits banner at top)
+      return Column(
+        children: [
+          _buildPSSCircuitsBlock(),
+          ListView.builder(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
@@ -527,8 +531,96 @@ class _SubstationScreenState extends State<SubstationScreen> {
               .fadeIn(duration: 400.ms, delay: (index * 60).clamp(0, 350).ms)
               .slideY(begin: 0.05, end: 0);
         },
+      ),
+        ],
       );
     }
+  }
+
+  Widget _buildPSSCircuitsBlock() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => const PssCircuitsScreen(),
+            ),
+          );
+        },
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFF003571),
+                Color(0xFF0F4C97),
+                Color(0xFF006493),
+              ],
+            ),
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFF003571).withValues(alpha: 0.3),
+                blurRadius: 16,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(
+                  Icons.electrical_services_rounded,
+                  color: Colors.white,
+                  size: 26,
+                ),
+              ),
+              const SizedBox(width: 16),
+              const Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'PSS CIRCUITS',
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white,
+                        letterSpacing: 1.5,
+                      ),
+                    ),
+                    SizedBox(height: 3),
+                    Text(
+                      'View circuit diagrams by location',
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 12,
+                        color: Colors.white70,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(
+                Icons.chevron_right_rounded,
+                color: Colors.white70,
+                size: 28,
+              ),
+            ],
+          ),
+        ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.05, end: 0),
+      ),
+    );
   }
 }
 
