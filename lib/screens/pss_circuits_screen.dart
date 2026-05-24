@@ -4,6 +4,7 @@ import '../models/pss_circuit.dart';
 import '../services/pss_circuit_service.dart';
 import '../theme.dart';
 import '../widgets/glass_card.dart';
+import 'pss_web_view_screen.dart';
 
 class PssCircuitsScreen extends StatefulWidget {
   const PssCircuitsScreen({super.key});
@@ -21,12 +22,21 @@ class _PssCircuitsScreenState extends State<PssCircuitsScreen> {
     _future = PssCircuitService.fetchActiveCircuits();
   }
 
-  void _showCircuitDiagram(BuildContext context, PssCircuit circuit) {
-    showDialog(
-      context: context,
-      barrierColor: Colors.black87,
-      builder: (_) => _CircuitDiagramDialog(circuit: circuit),
-    );
+  /// Routes to either the image viewer dialog or in-app WebView
+  void _openContent(BuildContext context, PssCircuit circuit) {
+    if (circuit.isWebContent) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => PssWebViewScreen(circuit: circuit),
+        ),
+      );
+    } else {
+      showDialog(
+        context: context,
+        barrierColor: Colors.black87,
+        builder: (_) => _CircuitDiagramDialog(circuit: circuit),
+      );
+    }
   }
 
   @override
@@ -85,23 +95,19 @@ class _PssCircuitsScreenState extends State<PssCircuitsScreen> {
                     const Text(
                       'Failed to load PSS Circuits',
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: TPColors.onSurface,
-                      ),
+                          fontWeight: FontWeight.bold, color: TPColors.onSurface),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       '${snapshot.error}',
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                        fontSize: 12,
-                        color: TPColors.onSurfaceVariant,
-                      ),
+                          fontSize: 12, color: TPColors.onSurfaceVariant),
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton.icon(
-                      onPressed: () =>
-                          setState(() => _future = PssCircuitService.fetchActiveCircuits()),
+                      onPressed: () => setState(
+                          () => _future = PssCircuitService.fetchActiveCircuits()),
                       icon: const Icon(Icons.refresh),
                       label: const Text('Retry'),
                     ),
@@ -125,9 +131,7 @@ class _PssCircuitsScreenState extends State<PssCircuitsScreen> {
                   const Text(
                     'No PSS Circuits found',
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: TPColors.onSurface,
-                    ),
+                        fontWeight: FontWeight.bold, color: TPColors.onSurface),
                   ),
                   const SizedBox(height: 4),
                   const Text(
@@ -143,13 +147,14 @@ class _PssCircuitsScreenState extends State<PssCircuitsScreen> {
           return RefreshIndicator(
             color: TPColors.primary,
             onRefresh: () async {
-              setState(() => _future = PssCircuitService.fetchActiveCircuits());
+              setState(
+                  () => _future = PssCircuitService.fetchActiveCircuits());
               await _future;
             },
             child: ListView(
               padding: const EdgeInsets.fromLTRB(16, 20, 16, 120),
               children: [
-                // Header info card
+                // Info card
                 GlassCard(
                   borderRadius: 12,
                   padding: const EdgeInsets.all(14),
@@ -197,13 +202,13 @@ class _PssCircuitsScreenState extends State<PssCircuitsScreen> {
                 ).animate().fadeIn(duration: 400.ms),
                 const SizedBox(height: 16),
 
-                // Circuit cards
+                // Circuit location cards
                 ...circuits.asMap().entries.map((entry) {
                   final index = entry.key;
                   final circuit = entry.value;
                   return _PssCircuitCard(
                     circuit: circuit,
-                    onQrTap: () => _showCircuitDiagram(context, circuit),
+                    onQrTap: () => _openContent(context, circuit),
                   )
                       .animate()
                       .fadeIn(
@@ -220,16 +225,13 @@ class _PssCircuitsScreenState extends State<PssCircuitsScreen> {
   }
 }
 
-// ─── Individual PSS Circuit Card ───────────────────────────────────────────
+// ─── Individual PSS Circuit Card (yellow label style) ─────────────────────
 
 class _PssCircuitCard extends StatelessWidget {
   final PssCircuit circuit;
   final VoidCallback onQrTap;
 
-  const _PssCircuitCard({
-    required this.circuit,
-    required this.onQrTap,
-  });
+  const _PssCircuitCard({required this.circuit, required this.onQrTap});
 
   @override
   Widget build(BuildContext context) {
@@ -253,7 +255,7 @@ class _PssCircuitCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Circuit number badge on the left edge
+            // ── Circuit number badge (left dark strip) ──────────────────
             Container(
               width: 48,
               decoration: BoxDecoration(
@@ -265,9 +267,7 @@ class _PssCircuitCard extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  circuit.circuitNumber > 0
-                      ? '${circuit.circuitNumber}'
-                      : '—',
+                  circuit.circuitNumber > 0 ? '${circuit.circuitNumber}' : '—',
                   style: const TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 18,
@@ -278,39 +278,25 @@ class _PssCircuitCard extends StatelessWidget {
               ),
             ),
 
-            // Main yellow-label area
+            // ── Yellow label area ────────────────────────────────────────
             Expanded(
               child: Container(
-                padding: const EdgeInsets.all(14),
-                decoration: const BoxDecoration(
-                  color: Color(0xFFFFF176), // Yellow matching physical label
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+                color: const Color(0xFFFFF176),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      circuit.locationName.toUpperCase(),
+                      circuit.title.toUpperCase(),
                       style: const TextStyle(
                         fontFamily: 'Inter',
                         fontSize: 15,
                         fontWeight: FontWeight.w900,
                         color: Color(0xFF1A1A1A),
-                        height: 1.2,
+                        height: 1.3,
                       ),
                     ),
-                    if (circuit.subtitle.isNotEmpty) ...[
-                      const SizedBox(height: 4),
-                      Text(
-                        circuit.subtitle.toUpperCase(),
-                        style: const TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 13,
-                          fontWeight: FontWeight.w800,
-                          color: Color(0xFF1A1A1A),
-                          height: 1.3,
-                        ),
-                      ),
-                    ],
                     if (circuit.busSection.isNotEmpty) ...[
                       const SizedBox(height: 8),
                       Text(
@@ -328,11 +314,11 @@ class _PssCircuitCard extends StatelessWidget {
               ),
             ),
 
-            // QR code tap button on the right
+            // ── QR / link tap zone (right) ───────────────────────────────
             GestureDetector(
               onTap: onQrTap,
               child: Container(
-                width: 84,
+                width: 80,
                 decoration: const BoxDecoration(
                   color: Color(0xFFFFF176),
                   borderRadius: BorderRadius.only(
@@ -344,7 +330,7 @@ class _PssCircuitCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(8),
@@ -353,18 +339,20 @@ class _PssCircuitCard extends StatelessWidget {
                           width: 1.5,
                         ),
                       ),
-                      child: const Icon(
-                        Icons.qr_code_2_rounded,
-                        size: 36,
-                        color: Color(0xFF1A6EB5),
+                      child: Icon(
+                        circuit.isWebContent
+                            ? Icons.open_in_browser_rounded
+                            : Icons.qr_code_2_rounded,
+                        size: 34,
+                        color: const Color(0xFF1A6EB5),
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 5),
                     const Text(
                       'SCAN',
                       style: TextStyle(
                         fontFamily: 'Inter',
-                        fontSize: 9,
+                        fontSize: 8,
                         fontWeight: FontWeight.w900,
                         color: Color(0xFF1A1A1A),
                         letterSpacing: 0.5,
@@ -374,7 +362,7 @@ class _PssCircuitCard extends StatelessWidget {
                       'ME!',
                       style: TextStyle(
                         fontFamily: 'Inter',
-                        fontSize: 9,
+                        fontSize: 8,
                         fontWeight: FontWeight.w900,
                         color: Color(0xFF1A1A1A),
                         letterSpacing: 0.5,
@@ -391,11 +379,10 @@ class _PssCircuitCard extends StatelessWidget {
   }
 }
 
-// ─── Circuit Diagram Dialog ────────────────────────────────────────────────
+// ─── Image-only fullscreen viewer ─────────────────────────────────────────
 
 class _CircuitDiagramDialog extends StatefulWidget {
   final PssCircuit circuit;
-
   const _CircuitDiagramDialog({required this.circuit});
 
   @override
@@ -403,12 +390,12 @@ class _CircuitDiagramDialog extends StatefulWidget {
 }
 
 class _CircuitDiagramDialogState extends State<_CircuitDiagramDialog> {
-  final TransformationController _transformationController =
+  final TransformationController _transformController =
       TransformationController();
 
   @override
   void dispose() {
-    _transformationController.dispose();
+    _transformController.dispose();
     super.dispose();
   }
 
@@ -419,56 +406,47 @@ class _CircuitDiagramDialogState extends State<_CircuitDiagramDialog> {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          // Pinch-to-zoom image viewer
+          // Zoomable image
           InteractiveViewer(
-            transformationController: _transformationController,
+            transformationController: _transformController,
             minScale: 0.5,
             maxScale: 5.0,
             child: Center(
               child: Image.network(
-                widget.circuit.imageUrl,
+                widget.circuit.contentUrl,
                 fit: BoxFit.contain,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
+                loadingBuilder: (context, child, progress) {
+                  if (progress == null) return child;
                   return Center(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
+                          value: progress.expectedTotalBytes != null
+                              ? progress.cumulativeBytesLoaded /
+                                  progress.expectedTotalBytes!
                               : null,
                           valueColor: const AlwaysStoppedAnimation<Color>(
                               Colors.white70),
                         ),
                         const SizedBox(height: 16),
-                        const Text(
-                          'Loading circuit diagram…',
-                          style: TextStyle(color: Colors.white54, fontSize: 13),
-                        ),
+                        const Text('Loading circuit diagram…',
+                            style: TextStyle(
+                                color: Colors.white54, fontSize: 13)),
                       ],
                     ),
                   );
                 },
-                errorBuilder: (context, error, stackTrace) => Center(
+                errorBuilder: (context, error, _) => Center(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const Icon(Icons.broken_image_outlined,
                           size: 64, color: Colors.white30),
                       const SizedBox(height: 12),
-                      const Text(
-                        'Could not load image',
-                        style: TextStyle(color: Colors.white54, fontSize: 14),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        widget.circuit.imageUrl,
-                        style: const TextStyle(
-                            color: Colors.white24, fontSize: 10),
-                        textAlign: TextAlign.center,
-                      ),
+                      const Text('Could not load image',
+                          style: TextStyle(
+                              color: Colors.white54, fontSize: 14)),
                     ],
                   ),
                 ),
@@ -476,7 +454,7 @@ class _CircuitDiagramDialogState extends State<_CircuitDiagramDialog> {
             ),
           ),
 
-          // Header bar with title and close button
+          // Header overlay
           Positioned(
             top: 0,
             left: 0,
@@ -486,7 +464,7 @@ class _CircuitDiagramDialogState extends State<_CircuitDiagramDialog> {
                 top: MediaQuery.of(context).padding.top + 8,
                 left: 8,
                 right: 8,
-                bottom: 8,
+                bottom: 12,
               ),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -506,23 +484,21 @@ class _CircuitDiagramDialogState extends State<_CircuitDiagramDialog> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.circuit.locationName.toUpperCase(),
+                          widget.circuit.title.toUpperCase(),
                           style: const TextStyle(
                             fontFamily: 'Inter',
-                            fontSize: 14,
+                            fontSize: 13,
                             fontWeight: FontWeight.w900,
                             color: Colors.white,
-                            letterSpacing: 0.5,
                           ),
                         ),
-                        if (widget.circuit.subtitle.isNotEmpty)
+                        if (widget.circuit.busSection.isNotEmpty)
                           Text(
-                            widget.circuit.subtitle,
+                            widget.circuit.busSection,
                             style: const TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 11,
-                              color: Colors.white70,
-                            ),
+                                fontFamily: 'Inter',
+                                fontSize: 11,
+                                color: Colors.white70),
                           ),
                       ],
                     ),
@@ -545,7 +521,7 @@ class _CircuitDiagramDialogState extends State<_CircuitDiagramDialog> {
             ),
           ),
 
-          // Pinch hint at bottom
+          // Pinch hint
           Positioned(
             bottom: MediaQuery.of(context).padding.bottom + 16,
             left: 0,
@@ -561,12 +537,12 @@ class _CircuitDiagramDialogState extends State<_CircuitDiagramDialog> {
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.pinch_outlined, size: 14, color: Colors.white60),
+                    Icon(Icons.pinch_outlined,
+                        size: 14, color: Colors.white60),
                     SizedBox(width: 6),
-                    Text(
-                      'Pinch to zoom',
-                      style: TextStyle(color: Colors.white60, fontSize: 12),
-                    ),
+                    Text('Pinch to zoom',
+                        style: TextStyle(
+                            color: Colors.white60, fontSize: 12)),
                   ],
                 ),
               ),
