@@ -7,11 +7,11 @@ import '../models/pss_component.dart';
 import '../services/pss_component_service.dart';
 import 'pss_component_detail_screen.dart';
 
-/// Lists individual components within a PSS category
+/// Lists individual components within a PSS category (or all if category is null)
 class PssComponentsListScreen extends StatefulWidget {
-  final PssComponentCategory category;
+  final PssComponentCategory? category;
 
-  const PssComponentsListScreen({super.key, required this.category});
+  const PssComponentsListScreen({super.key, this.category});
 
   @override
   State<PssComponentsListScreen> createState() => _PssComponentsListScreenState();
@@ -29,12 +29,14 @@ class _PssComponentsListScreenState extends State<PssComponentsListScreen> {
 
   Future<void> _load() async {
     setState(() => _isLoading = true);
-    final comps = await PssComponentService.fetchComponents(widget.category.id);
+    final comps = widget.category != null
+        ? await PssComponentService.fetchComponents(widget.category!.id)
+        : await PssComponentService.fetchAllComponents();
     if (mounted) setState(() { _components = comps; _isLoading = false; });
   }
 
   IconData _categoryIcon() {
-    switch (widget.category.iconName) {
+    switch (widget.category?.iconName) {
       case 'electric_meter': return Icons.electric_meter;
       case 'router': return Icons.router;
       case 'settings_system_daydream': return Icons.settings_system_daydream;
@@ -75,9 +77,9 @@ class _PssComponentsListScreenState extends State<PssComponentsListScreen> {
                 background: Stack(
                   fit: StackFit.expand,
                   children: [
-                    widget.category.coverImageUrl != null
+                    widget.category?.coverImageUrl != null
                         ? CachedNetworkImage(
-                            imageUrl: widget.category.coverImageUrl!,
+                            imageUrl: widget.category!.coverImageUrl!,
                             fit: BoxFit.cover,
                             errorWidget: (ctx, url, err) => Container(
                               color: TPColors.primaryContainer,
@@ -119,13 +121,13 @@ class _PssComponentsListScreenState extends State<PssComponentsListScreen> {
                               border: Border.all(color: Colors.blue.shade300.withValues(alpha: 0.5)),
                             ),
                             child: Text(
-                              (widget.category.voltageClass ?? widget.category.priority).toUpperCase(),
+                              (widget.category?.voltageClass ?? widget.category?.priority ?? 'PSS').toUpperCase(),
                               style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white),
                             ),
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            widget.category.name,
+                            widget.category?.name ?? 'PSS Components',
                             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w800,
@@ -179,12 +181,12 @@ class _PssComponentsListScreenState extends State<PssComponentsListScreen> {
                               final comp = _components[index];
                               return _ComponentListTile(
                                 component: comp,
-                                categoryName: widget.category.name,
+                                categoryName: widget.category?.name ?? 'PSS Component',
                                 onTap: () => Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (_) => PssComponentDetailScreen(
                                       component: comp,
-                                      categoryName: widget.category.name,
+                                      categoryName: widget.category?.name ?? 'PSS Component',
                                     ),
                                   ),
                                 ),
