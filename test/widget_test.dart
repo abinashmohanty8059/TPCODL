@@ -1,12 +1,21 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:tpcodl/main.dart';
 
 void main() {
+  setUpAll(() async {
+    // Mock SharedPreferences platform channel
+    SharedPreferences.setMockInitialValues({});
+
+    // Initialize Supabase with dummy credentials for widget tests to avoid initialization assertion error.
+    await Supabase.initialize(
+      url: 'https://placeholder.supabase.co',
+      anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsYWNlaG9sZGVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2MDAwMDAwMDAsImV4cCI6MTkwMDAwMDAwMH0.placeholder',
+    );
+  });
+
   testWidgets('App launches smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const TPCODLApp());
@@ -24,23 +33,6 @@ void main() {
   });
 
   testWidgets('Tapping Photos card navigates to PhotosViewScreen', (WidgetTester tester) async {
-    // Read the actual file from disk
-    final file = File('subststion_data/data.txt');
-    final content = file.readAsStringSync();
-
-    // Mock rootBundle to return the contents of the file
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .setMockMessageHandler('flutter/assets', (message) async {
-      if (message == null) return null;
-      final Uint8List list = message.buffer.asUint8List(message.offsetInBytes, message.lengthInBytes);
-      final key = utf8.decode(list);
-      if (key.endsWith('data.txt')) {
-        final buffer = Uint8List.fromList(content.codeUnits).buffer;
-        return ByteData.view(buffer);
-      }
-      return null;
-    });
-
     await tester.pumpWidget(const TPCODLApp());
 
     // Advance virtual time to 3 seconds for the timer to trigger
