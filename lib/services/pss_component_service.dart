@@ -40,6 +40,20 @@ class PssComponentService {
     }
   }
 
+  static Future<List<PssComponent>> fetchAllComponents() async {
+    try {
+      final res = await _db
+          .from('pss_components')
+          .select()
+          .eq('display', true)
+          .order('sort_order', ascending: true);
+      return (res as List).map((m) => PssComponent.fromMap(m)).toList();
+    } catch (e) {
+      debugPrint('PssComponentService.fetchAllComponents: $e');
+      return [];
+    }
+  }
+
   // ── Detail points for a component ───────────────────────────────────────────
 
   static Future<List<PssComponentDetail>> fetchDetails(int componentId) async {
