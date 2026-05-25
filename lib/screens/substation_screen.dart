@@ -8,7 +8,7 @@ import '../widgets/glass_card.dart';
 import 'component_detail_screen.dart';
 import 'category_detail_screen.dart';
 import 'pss_circuits_screen.dart';
-import 'pss_components_screen.dart';
+import 'pss_components_list_screen.dart';
 
 class SubstationCategory {
   final String name;
@@ -562,7 +562,7 @@ class _SubstationScreenState extends State<SubstationScreen> {
       child: GestureDetector(
         onTap: () {
           Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => const PssComponentsScreen()),
+            MaterialPageRoute(builder: (_) => const PssComponentsListScreen()),
           );
         },
         child: Container(
