@@ -8,6 +8,7 @@ import '../widgets/glass_card.dart';
 import 'component_detail_screen.dart';
 import 'category_detail_screen.dart';
 import 'pss_circuits_screen.dart';
+import 'pss_components_screen.dart';
 
 class SubstationCategory {
   final String name;
@@ -221,8 +222,10 @@ class _SubstationScreenState extends State<SubstationScreen> {
           const SizedBox(height: 12),
           Text(
             'Explore the critical hardware that powers the modern grid. High-fidelity utility components engineered for precision and reliability.',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: TPColors.onSurfaceVariant,
+                  fontSize: 12,
+                  height: 1.45,
                 ),
           ).animate().fadeIn(duration: 500.ms, delay: 300.ms),
           const SizedBox(height: 16),
@@ -286,30 +289,7 @@ class _SubstationScreenState extends State<SubstationScreen> {
               ],
             ),
           ).animate().fadeIn(duration: 500.ms, delay: 400.ms).slideY(begin: 0.05, end: 0),
-          const SizedBox(height: 16),
-
-          // Quick stat cards
-          Row(
-            children: [
-              Expanded(
-                child: _buildQuickStatCard(
-                  'Monitored Types',
-                  '${_categories.length} Categories',
-                  Icons.developer_board,
-                  Colors.blue.shade600,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _buildQuickStatCard(
-                  'Comm Status',
-                  '100% ONLINE',
-                  Icons.wifi,
-                  Colors.green.shade600,
-                ),
-              ),
-            ],
-          ).animate().fadeIn(duration: 500.ms, delay: 500.ms),
+          const SizedBox(height: 8),
         ],
       ),
     );
@@ -351,54 +331,6 @@ class _SubstationScreenState extends State<SubstationScreen> {
           overflow: TextOverflow.ellipsis,
         ),
       ],
-    );
-  }
-
-  Widget _buildQuickStatCard(String title, String value, IconData icon, Color color) {
-    return GlassCard(
-      borderRadius: 12,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(icon, size: 20, color: color),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 9,
-                    fontWeight: FontWeight.w700,
-                    color: TPColors.onSurfaceVariant,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  value,
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 13,
-                    fontWeight: FontWeight.w800,
-                    color: color,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -497,10 +429,11 @@ class _SubstationScreenState extends State<SubstationScreen> {
         },
       );
     } else {
-      // Show list of Categories (with PSS Circuits banner at top)
+      // Show list of Categories (with PSS Circuits + PSS Components banners at top)
       return Column(
         children: [
           _buildPSSCircuitsBlock(),
+          _buildPSSComponentsBlock(),
           ListView.builder(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
         shrinkWrap: true,
@@ -619,6 +552,90 @@ class _SubstationScreenState extends State<SubstationScreen> {
             ],
           ),
         ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.05, end: 0),
+      ),
+    );
+  }
+
+  Widget _buildPSSComponentsBlock() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => const PssComponentsScreen()),
+          );
+        },
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFF00695C),
+                Color(0xFF00897B),
+                Color(0xFF00ACC1),
+              ],
+            ),
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFF00695C).withValues(alpha: 0.3),
+                blurRadius: 16,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(
+                  Icons.developer_board_rounded,
+                  color: Colors.white,
+                  size: 26,
+                ),
+              ),
+              const SizedBox(width: 16),
+              const Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'PSS COMPONENTS',
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white,
+                        letterSpacing: 1.5,
+                      ),
+                    ),
+                    SizedBox(height: 3),
+                    Text(
+                      'Browse equipment by category with detailed specs',
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 12,
+                        color: Colors.white70,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(
+                Icons.chevron_right_rounded,
+                color: Colors.white70,
+                size: 28,
+              ),
+            ],
+          ),
+        ).animate().fadeIn(duration: 400.ms, delay: 80.ms).slideY(begin: 0.05, end: 0),
       ),
     );
   }
