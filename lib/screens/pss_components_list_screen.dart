@@ -113,15 +113,9 @@ class _PssComponentsListScreenState extends State<PssComponentsListScreen> {
                   background: Stack(
                     fit: StackFit.expand,
                     children: [
-                      CachedNetworkImage(
-                        imageUrl: 'https://ik.imagekit.io/tm5te9cjl/TPCODL/Gallary/transformer.jpg',
+                      Image.asset(
+                        'assets/pss_components_header.png',
                         fit: BoxFit.cover,
-                        errorWidget: (ctx, url, err) => Container(
-                          color: TPColors.primaryContainer,
-                          child: const Center(
-                            child: Icon(Icons.developer_board, size: 72, color: Colors.white24),
-                          ),
-                        ),
                       ),
                       Positioned.fill(
                         child: Container(
