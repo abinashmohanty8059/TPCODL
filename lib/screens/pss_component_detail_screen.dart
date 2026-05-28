@@ -9,12 +9,10 @@ import '../widgets/glass_card.dart';
 
 class PssComponentDetailScreen extends StatefulWidget {
   final PssComponent component;
-  final String categoryName;
 
   const PssComponentDetailScreen({
     super.key,
     required this.component,
-    required this.categoryName,
   });
 
   @override
@@ -201,7 +199,7 @@ class _PssComponentDetailScreenState extends State<PssComponentDetailScreen> {
                                   border: Border.all(color: Colors.cyan.shade300.withValues(alpha: 0.5)),
                                 ),
                                 child: Text(
-                                  widget.categoryName.toUpperCase(),
+                                  widget.component.category.toUpperCase(),
                                   style: const TextStyle(
                                     fontFamily: 'Inter',
                                     fontSize: 10,
