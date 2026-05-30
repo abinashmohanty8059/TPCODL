@@ -1,4 +1,4 @@
-package com.example.tpcodl
+package org.tpcodl.learning
 
 import io.flutter.embedding.android.FlutterActivity
 
